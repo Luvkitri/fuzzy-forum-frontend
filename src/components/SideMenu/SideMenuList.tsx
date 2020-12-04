@@ -8,6 +8,8 @@ import SideMenuThread from './SideMenuThread';
 // @material-ui components
 import {
     List,
+    Divider,
+    Typography,
     ListItem,
     ListItemIcon,
     ListItemText
@@ -30,7 +32,13 @@ type Props = {
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
-        toolbar: theme.mixins.toolbar,
+        toolbar: {
+            padding: '10px 15px 0px',
+            ...theme.mixins.toolbar
+        },
+        title: {
+            flexGrow: 1,
+        },
     })
 )
 
@@ -39,10 +47,14 @@ const SideMenuList: React.FC<Props> = ({ threads }) => {
 
     return (
         <div>
-            <div className={classes.toolbar} />
+            <div className={classes.toolbar}> 
+                <Typography className={classes.title}>Fuzzy Forum</Typography>
+                <Typography>v 0.0.1</Typography>
+            </div>
+            <Divider />
             <List>
                 {threads.map((thread) => (
-                    <SideMenuThread key={thread.id} name={thread.name} subThreads={thread.SubThreads}/>
+                    <SideMenuThread key={thread.id} name={thread.name} subThreads={thread.SubThreads} />
                 ))}
             </List>
         </div>

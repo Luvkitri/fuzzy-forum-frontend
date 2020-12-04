@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 // interfaces
 import { Thread } from '../../ts/interfaces/db_interfaces';
@@ -7,6 +7,7 @@ import { Thread } from '../../ts/interfaces/db_interfaces';
 import {
     Hidden,
     Drawer,
+    Typography,
 } from '@material-ui/core'
 
 // @material-ui styles
@@ -14,7 +15,9 @@ import { makeStyles, useTheme, Theme, createStyles } from '@material-ui/core/sty
 import SideMenuList from './SideMenuList';
 
 type Props = {
-    threads: Thread[]
+    threads: Thread[],
+    mobileOpen: boolean,
+    handleDrawerToggle(): void
 }
 
 const drawerWidth = 240;
@@ -48,7 +51,7 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-const SideMenu: React.FC<Props> = ({ threads }) => {
+const SideMenu: React.FC<Props> = ({ threads, mobileOpen, handleDrawerToggle }) => {
     const classes = useStyles();
     const theme = useTheme();
 
@@ -59,6 +62,8 @@ const SideMenu: React.FC<Props> = ({ threads }) => {
                 <Drawer
                     variant="temporary"
                     anchor={theme.direction === 'rtl' ? 'right' : 'left'}
+                    open={mobileOpen}
+                    onClose={handleDrawerToggle}
                     classes={{
                         paper: classes.drawerPaper,
                     }}

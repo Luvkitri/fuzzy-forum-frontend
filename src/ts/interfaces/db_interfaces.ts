@@ -13,27 +13,27 @@ export interface Entry {
     Thread: {
         id: number;
         name: string;
-    },
+    };
     SubThreadsInEntry: SubThread[];
     User: {
         first_name: string,
         last_name: string
-    }
+    };
 }
 
 export interface Tag {
-    id: number,
-    name: string
+    id: number;
+    name: string;
 }
 
 export interface Thread {
-    id: number,
-    name: string,
-    SubThreads: SubThread[]
+    id: number;
+    name: string;
+    SubThreads: SubThread[];
 }
 
 export interface SubThread {
-    id: number,
-    name: string,
-    thread_id: number
+    id: number;
+    name: string;
+    thread_id: number;
 }

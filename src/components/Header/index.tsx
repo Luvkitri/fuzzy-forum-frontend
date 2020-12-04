@@ -51,6 +51,11 @@ const Header: React.FC = () => {
     const classes = useStyles();
 
     const [threads, setThreads] = useState<Thread[]>([]);
+    const [mobileOpen, setMobileOpen] = useState<boolean>(false);
+
+    const handleDrawerToggle = () => {
+        setMobileOpen(!mobileOpen);
+    }
 
     useEffect(() => {
         const fetchItems = async () => {
@@ -67,10 +72,6 @@ const Header: React.FC = () => {
 
         fetchItems();
     }, []);
-
-
-    const handleDrawerToggle = () => {
-    };
 
     return (
         <div className={classes.root}>
@@ -89,9 +90,10 @@ const Header: React.FC = () => {
                         Fuzzy-Forum
                     </Typography>
                     <Button color="inherit">Login</Button>
+                    <Button color="inherit">Sign up</Button>
                 </Toolbar>
             </AppBar>
-            <SideMenu threads={threads} />
+            <SideMenu threads={threads} mobileOpen={mobileOpen} handleDrawerToggle={handleDrawerToggle} />
         </div>
     )
 }
