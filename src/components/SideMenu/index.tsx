@@ -57,7 +57,6 @@ const SideMenu: React.FC<Props> = ({ threads, mobileOpen, handleDrawerToggle }) 
 
     return (
         <nav className={classes.drawer} aria-label="mailbox folders">
-            {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
             <Hidden mdUp implementation="css">
                 <Drawer
                     variant="temporary"
