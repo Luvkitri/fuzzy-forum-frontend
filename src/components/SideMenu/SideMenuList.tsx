@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         toolbar: {
             padding: '10px 15px 0px',
-            ...theme.mixins.toolbar
+            minHeight: '64px'
         },
         title: {
             flexGrow: 1,
