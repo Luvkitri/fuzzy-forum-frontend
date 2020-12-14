@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link, useHistory } from 'react-router-dom';
 import axios from 'axios';
 
 // interfaces
@@ -26,6 +27,10 @@ import {
 // @material-ui icons
 import MenuIcon from '@material-ui/icons/Menu';
 
+type Props = {
+    sideMenu: boolean
+}
+
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
@@ -44,10 +49,15 @@ const useStyles = makeStyles((theme: Theme) =>
         title: {
             flexGrow: 1,
         },
+        link: {
+            textDecoration: 'none',
+            color: 'white'
+        },
     }),
 );
 
-const Header: React.FC = () => {
+const Header: React.FC<Props> = ({ sideMenu }) => {
+    const history = useHistory();
     const classes = useStyles();
 
     const [threads, setThreads] = useState<Thread[]>([]);
@@ -77,23 +87,25 @@ const Header: React.FC = () => {
         <div className={classes.root}>
             <AppBar position="fixed" className={classes.navBar}>
                 <Toolbar>
-                    <IconButton
-                        edge="start"
-                        className={classes.menuButton}
-                        color="inherit"
-                        aria-label="menu"
-                        onClick={handleDrawerToggle}
-                    >
-                        <MenuIcon />
-                    </IconButton>
+                    {sideMenu &&
+                        <IconButton
+                            edge="start"
+                            className={classes.menuButton}
+                            color="inherit"
+                            aria-label="menu"
+                            onClick={handleDrawerToggle}
+                        >
+                            <MenuIcon />
+                        </IconButton>
+                    }
                     <Typography variant="h6" className={classes.title}>
-                        Fuzzy-Forum
+                        <Link to="/" className={classes.link}>Fuzzy-Forum</Link>
                     </Typography>
-                    <Button color="inherit">Login</Button>
-                    <Button color="inherit">Sign up</Button>
+                    <Button color="inherit" onClick={() => { history.push("/users/login") }}>Login</Button>
+                    <Button color="inherit" onClick={() => { history.push("/users/signup") }}>Sign up</Button>
                 </Toolbar>
             </AppBar>
-            <SideMenu threads={threads} mobileOpen={mobileOpen} handleDrawerToggle={handleDrawerToggle} />
+            {sideMenu && <SideMenu threads={threads} mobileOpen={mobileOpen} handleDrawerToggle={handleDrawerToggle} />}
         </div>
     )
 }
