@@ -2,7 +2,12 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Entry, Thread } from '../../ts/interfaces/db_interfaces';
 
+// components
+import Header from '../../components/Header';
 import List from '../../components/Preview/List'
+
+// @material-ui
+import CssBaseline from '@material-ui/core/CssBaseline';
 
 const HomePage: React.FC = () => {
     const [entries, setEntries] = useState<Entry[]>([]);
@@ -27,7 +32,11 @@ const HomePage: React.FC = () => {
     }, []);
 
     return (
-        <List isLoading={isLoading} entries={entries} />
+        <div>
+            <CssBaseline />
+            <Header sideMenu={true} />
+            <List isLoading={isLoading} entries={entries} />
+        </div>
     );
 }
 
