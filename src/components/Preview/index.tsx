@@ -47,8 +47,6 @@ const EntryPreview: React.FC<Props> = ({ entry }) => {
     const classes = useStyles();
     const posted_at: Date = new Date(Date.parse(entry.posted_at));
 
-    console.log(entry);
-
     return (
         <Card className={classes.root}>
             <CardHeader className={classes.header}

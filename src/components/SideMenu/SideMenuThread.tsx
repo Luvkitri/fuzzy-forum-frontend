@@ -1,13 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 // interfaces
 import { SubThread } from '../../ts/interfaces/db_interfaces'
 
 // Components
 import SideMenuSubThread from './SideMenuSubThread';
-
-// @material-ui styles
-import { makeStyles, useTheme, Theme, createStyles } from '@material-ui/core/styles';
 
 // @material-ui componentes
 import {
@@ -26,14 +23,7 @@ type Props = {
     subThreads: SubThread[]
 }
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-
-    }),
-);
-
 const Thread: React.FC<Props> = ({ key, name, subThreads }) => {
-    const classes = useStyles();
     const [open, setOpen] = useState<boolean>(false);
 
     const handleClick = () => {

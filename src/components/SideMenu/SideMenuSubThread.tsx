@@ -4,7 +4,7 @@ import React from 'react'
 import { ListItem, ListItemText } from '@material-ui/core';
 
 // @material-ui styles
-import { makeStyles, useTheme, Theme, createStyles } from '@material-ui/core/styles';
+import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 
 
 type Props = {

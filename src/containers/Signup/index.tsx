@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { Redirect, useHistory } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import { useForm } from "react-hook-form";
 import axios from 'axios';
 import { setLocalStorage } from '../../utils/auth';
@@ -67,7 +67,6 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const SignupPage: React.FC = () => {
     const classes = useStyles();
-    const history = useHistory();
     const { register, handleSubmit, errors, watch } = useForm();
 
     const [registered, setRegistered] = useState<boolean>(false);

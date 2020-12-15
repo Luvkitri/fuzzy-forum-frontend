@@ -12,7 +12,6 @@ import {
     FormControlLabel,
     Checkbox,
     Button,
-    Container,
     Avatar,
     Typography,
     Link
@@ -26,8 +25,6 @@ import {
 } from '@material-ui/core/styles'
 
 // @material-ui icons
-import Face from '@material-ui/icons/Face';
-import Fingerprint from '@material-ui/icons/Fingerprint';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 
 const useStyles = makeStyles((theme: Theme) =>

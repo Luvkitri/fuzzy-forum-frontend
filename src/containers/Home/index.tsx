@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Entry, Thread } from '../../ts/interfaces/db_interfaces';
+import { Entry } from '../../ts/interfaces/db_interfaces';
 
 // components
 import Header from '../../components/Header';
@@ -11,7 +11,6 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 
 const HomePage: React.FC = () => {
     const [entries, setEntries] = useState<Entry[]>([]);
-    const [threads, setThreads] = useState<Thread[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
 
     useEffect(() => {

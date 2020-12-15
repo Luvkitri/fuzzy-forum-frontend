@@ -10,27 +10,19 @@ import {
     List,
     Divider,
     Typography,
-    ListItem,
-    ListItemIcon,
-    ListItemText
 } from '@material-ui/core'
 
 // @material-ui styles
 import {
     createStyles,
-    makeStyles,
-    Theme
+    makeStyles
 } from '@material-ui/core/styles'
-
-// @material-ui icons
-import InboxIcon from '@material-ui/icons/MoveToInbox'
-import MailIcon from '@material-ui/icons/Mail'
 
 type Props = {
     threads: Thread[]
 }
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles(() =>
     createStyles({
         toolbar: {
             padding: '10px 15px 0px',

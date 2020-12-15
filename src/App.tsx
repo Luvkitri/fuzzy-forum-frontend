@@ -1,16 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 // containers
 import Home from './containers/Home';
 import Login from './containers/Login';
 import Signup from './containers/Signup';
-
-// components
-import Header from './components/Header';
-
-// @material-ui
-import CssBaseline from '@material-ui/core/CssBaseline';
 
 const App: React.FC = () => {
     return (

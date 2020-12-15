@@ -1,14 +1,13 @@
 import React from 'react';
 
 // interfaces
-import { Tag, Thread } from '../../ts/interfaces/db_interfaces'
+import { Tag } from '../../ts/interfaces/db_interfaces'
 
 // @material-ui components
-import { CardActions, Chip, Divider } from '@material-ui/core';
+import { CardActions, Chip } from '@material-ui/core';
 
 // @material-ui styles
-import { makeStyles, useTheme, Theme, createStyles } from '@material-ui/core/styles';
-import { createTrue } from 'typescript';
+import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 
 type Props = {
     thread: {

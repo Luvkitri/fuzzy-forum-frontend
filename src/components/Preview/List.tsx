@@ -10,7 +10,7 @@ import Preview from '.';
 import { Container } from '@material-ui/core';
 
 // @material-ui styles
-import { makeStyles, useTheme, Theme, createStyles } from '@material-ui/core/styles';
+import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 
 type Props = {
     entries: Entry[],
@@ -28,7 +28,6 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const List: React.FC<Props> = ({ isLoading, entries }) => {
     const classes = useStyles();
-    const theme = useTheme();
 
     if (isLoading) {
         return <h1>Loading...</h1>

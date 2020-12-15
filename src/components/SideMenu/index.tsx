@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 
 // interfaces
 import { Thread } from '../../ts/interfaces/db_interfaces';
@@ -7,7 +7,6 @@ import { Thread } from '../../ts/interfaces/db_interfaces';
 import {
     Hidden,
     Drawer,
-    Typography,
 } from '@material-ui/core'
 
 // @material-ui styles
