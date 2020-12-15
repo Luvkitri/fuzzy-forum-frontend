@@ -1,6 +1,8 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
+import { Redirect, useHistory } from 'react-router-dom';
 import { useForm } from "react-hook-form";
 import axios from 'axios';
+import { setLocalStorage } from '../../utils/auth';
 
 // components
 import Header from '../../components/Header';
@@ -65,19 +67,29 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const SignupPage: React.FC = () => {
     const classes = useStyles();
+    const history = useHistory();
     const { register, handleSubmit, errors, watch } = useForm();
-    
+
+    const [registered, setRegistered] = useState<boolean>(false);
+
     const password = useRef({});
     password.current = watch("password", "");
 
     const onSubmit = async (registerData: RegisterData) => {
         const res = await axios.post('http://localhost:5000/users/signup', registerData);
-        const newUser = res.data;
+        const responseObj = res.data;
 
-        if (!newUser.sucess) {
+        if (!responseObj.auth) {
             // TODO Handle error on register
+            console.log(responseObj.error);
         }
 
+        setLocalStorage(responseObj);
+        setRegistered(true);
+    }
+
+    if (registered) {
+        return <Redirect to="/users/login" />
     }
 
     return (
@@ -94,10 +106,10 @@ const SignupPage: React.FC = () => {
                 <form className={classes.form} onSubmit={handleSubmit(onSubmit)}>
                     <TextField
                         name="firstName"
-                        inputRef={register({ 
-                            required: true, 
+                        inputRef={register({
+                            required: true,
                             minLength: 2,
-                            maxLength: 50 
+                            maxLength: 50
                         })}
                         id="firstName"
                         label="First Name"
@@ -159,10 +171,10 @@ const SignupPage: React.FC = () => {
                     />
                     <TextField
                         name="password"
-                        inputRef={register({ 
-                            required: true, 
+                        inputRef={register({
+                            required: true,
                             minLength: 6,
-                            maxLength: 50 
+                            maxLength: 50
                         })}
                         label="Password"
                         type="password"
@@ -178,8 +190,8 @@ const SignupPage: React.FC = () => {
                     <TextField
                         name="confirmPassword"
                         inputRef={register({
-                            required: true, 
-                            minLength: 6, 
+                            required: true,
+                            minLength: 6,
                             maxLength: 50,
                             validate: value => value === password.current
                         })}
@@ -205,7 +217,6 @@ const SignupPage: React.FC = () => {
                     </Button>
                 </form>
             </Paper>
-
         </div>
     );
 }
