@@ -1,8 +1,8 @@
 import React, { useRef, useState } from 'react';
-import { Redirect } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { useForm } from "react-hook-form";
 import axios from 'axios';
-import { setLocalStorage } from '../../utils/auth';
+import { isLoggedIn } from '../../utils/auth';
 
 // components
 import Header from '../../components/Header';
@@ -67,9 +67,10 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const SignupPage: React.FC = () => {
     const classes = useStyles();
+    const history = useHistory();
     const { register, handleSubmit, errors, watch } = useForm();
 
-    const [registered, setRegistered] = useState<boolean>(false);
+    //const [registered, setRegistered] = useState<boolean>(false);
 
     const password = useRef({});
     password.current = watch("password", "");
@@ -78,17 +79,16 @@ const SignupPage: React.FC = () => {
         const res = await axios.post('http://localhost:5000/users/signup', registerData);
         const responseObj = res.data;
 
-        if (!responseObj.auth) {
+        if (!responseObj.success) {
             // TODO Handle error on register
             console.log(responseObj.error);
         }
 
-        setLocalStorage(responseObj);
-        setRegistered(true);
+        history.push('/users/login');
     }
 
-    if (registered) {
-        return <Redirect to="/users/login" />
+    if (isLoggedIn()) {
+        history.goBack();
     }
 
     return (

@@ -1,7 +1,7 @@
 import { Register } from '../ts/interfaces/res_interfaces';
 import moment from 'moment';
 
-export const setLocalStorage = (responseObj: Register) => {
+export const setLocalStorage = (responseObj: Register ) => {
     const expires = moment().add(responseObj.expiresIn);
 
     localStorage.setItem('token', responseObj.token);
@@ -14,16 +14,21 @@ export const logout = () => {
 }
 
 export const isLoggedIn = () => {
-    return moment().isBefore(getExpiration());
+    return !moment().isSameOrBefore(getExpiration());
 }
 
 export const isLoggedOut = () => {
-    return !moment().isBefore(getExpiration());
+    return moment().isBefore(getExpiration());
 }
 
 export const getExpiration = () => {
     const expiration = localStorage.getItem('expires') || '';
+
+    if (expiration === '') {
+        return moment().valueOf();
+    }
+
     const expiresAt = JSON.parse(expiration);
 
-    return moment(expiresAt);
+    return expiresAt;
 }

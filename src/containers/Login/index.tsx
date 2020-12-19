@@ -1,4 +1,8 @@
-import React from 'react'
+import React, { useState } from 'react';
+import { Redirect } from 'react-router-dom';
+import { useForm } from "react-hook-form";
+import axios from 'axios';
+import { isLoggedIn, setLocalStorage } from '../../utils/auth';
 
 // components
 import Header from '../../components/Header';
@@ -26,6 +30,11 @@ import {
 
 // @material-ui icons
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+
+type LoginData = {
+    email: string,
+    password: string
+}
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -58,6 +67,22 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const LoginPage: React.FC = () => {
     const classes = useStyles();
+    const { register, handleSubmit, errors } = useForm();
+
+    const onSubmit = async (loginData: LoginData) => {
+        const res = await axios.post('http://localhost:5000/users/login', loginData);
+        const responseObj = res.data;
+
+        if (!responseObj.auth) {
+            console.log(responseObj.error);
+        }
+
+        setLocalStorage(responseObj);
+    }
+
+    if (isLoggedIn()) {
+        return <Redirect to="/" />;
+    }
 
     return (
         <div>
@@ -70,22 +95,27 @@ const LoginPage: React.FC = () => {
                 <Typography variant="h5" component="h2">
                     Log In
                 </Typography>
-                <form className={classes.form} noValidate>
+                <form className={classes.form} onSubmit={handleSubmit(onSubmit)}>
                     <TextField
+                        name="email"
+                        inputRef={register({
+                            required: true
+                        })}
+                        label="Email Address"
+                        id="email"
                         variant="outlined"
                         margin="normal"
                         required
                         fullWidth
-                        id="email"
-                        label="Email Address"
-                        name="email"
                         autoComplete="email"
                         autoFocus
                     />
                     <TextField
                         variant="outlined"
                         margin="normal"
-                        required
+                        inputRef={register({
+                            required: true
+                        })}
                         fullWidth
                         name="password"
                         label="Password"

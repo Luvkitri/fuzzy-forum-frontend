@@ -7,6 +7,7 @@ import { Thread } from '../../ts/interfaces/db_interfaces'
 
 // components
 import SideMenu from '../SideMenu';
+import Controls from './Controls';
 
 // @material-ui components
 import {
@@ -26,6 +27,8 @@ import {
 
 // @material-ui icons
 import MenuIcon from '@material-ui/icons/Menu';
+import { isLoggedIn } from '../../utils/auth';
+
 
 type Props = {
     sideMenu: boolean
@@ -57,7 +60,6 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 const Header: React.FC<Props> = ({ sideMenu }) => {
-    const history = useHistory();
     const classes = useStyles();
 
     const [threads, setThreads] = useState<Thread[]>([]);
@@ -83,6 +85,10 @@ const Header: React.FC<Props> = ({ sideMenu }) => {
         fetchItems();
     }, []);
 
+    if (isLoggedIn()) {
+
+    }
+
     return (
         <div className={classes.root}>
             <AppBar position="fixed" className={classes.navBar}>
@@ -101,8 +107,7 @@ const Header: React.FC<Props> = ({ sideMenu }) => {
                     <Typography variant="h6" className={classes.title}>
                         <Link to="/" className={classes.link}>Fuzzy-Forum</Link>
                     </Typography>
-                    <Button color="inherit" onClick={() => { history.push("/users/login") }}>Login</Button>
-                    <Button color="inherit" onClick={() => { history.push("/users/signup") }}>Sign up</Button>
+                    <Controls />
                 </Toolbar>
             </AppBar>
             {sideMenu && <SideMenu threads={threads} mobileOpen={mobileOpen} handleDrawerToggle={handleDrawerToggle} />}
