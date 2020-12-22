@@ -1,6 +1,12 @@
-import React from 'react';
-import { useHistory } from 'react-router-dom';
-import { isLoggedIn } from '../../utils/auth';
+import React, { useContext } from 'react';
+import { Redirect, useHistory } from 'react-router-dom';
+import { isLoggedIn, logout } from '../../utils/auth';
+
+// types
+import { UserContextType } from '../../ts/types/context_types';
+
+// context
+import { UserContext } from '../../context/User';
 
 // @material-ui components
 import {
@@ -9,22 +15,28 @@ import {
     Avatar
 } from '@material-ui/core';
 
-const Controls = () => {
-    const history = useHistory();
+// @material-ui icons
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
-    // TODO
+
+
+const Controls: React.FC = () => {
+    const history = useHistory();
+    const { user, setUser } = useContext<UserContextType>(UserContext);
+
     if (isLoggedIn()) {
         return (
             <React.Fragment>
                 <Button color="inherit" onClick={() => {
-                    console.log('user info');
+                    console.log(user);
                 }}>
-                    USER_NAME
+                    {user && user.login}
                 </Button>
                 <Button color="inherit" onClick={() => {
-                    console.log('logout');
+                    logout();
+                    setUser(null);
                 }}>
-                    Logout
+                    <ExitToAppIcon />
                 </Button>
             </React.Fragment>
         )
