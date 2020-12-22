@@ -21,8 +21,9 @@ const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
             flexGrow: 1,
-            padding: theme.spacing(10),
+            marginLeft: theme.spacing(30),
         },
+        toolbar: theme.mixins.toolbar,
     }),
 );
 
@@ -35,7 +36,8 @@ const List: React.FC<Props> = ({ isLoading, entries }) => {
 
     return (
         <div className={classes.root}>
-            <Container maxWidth="lg">
+            <div className={classes.toolbar} />
+            <Container maxWidth="xl">
                 {entries.filter(entry => entry.active).map(entry => (
                     <Preview entry={entry} />
                 ))}
