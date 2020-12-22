@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Redirect } from 'react-router-dom';
 import { useForm } from "react-hook-form";
 import axios from 'axios';
@@ -30,6 +30,8 @@ import {
 
 // @material-ui icons
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import { UserContext } from '../../context/User';
+import { UserContextType } from '../../ts/types/context_types';
 
 type LoginData = {
     email: string,
@@ -68,6 +70,7 @@ const useStyles = makeStyles((theme: Theme) =>
 const LoginPage: React.FC = () => {
     const classes = useStyles();
     const { register, handleSubmit, errors } = useForm();
+    const { setUser } = useContext<UserContextType>(UserContext);
 
     const onSubmit = async (loginData: LoginData) => {
         const res = await axios.post('http://localhost:5000/users/login', loginData);
@@ -78,6 +81,7 @@ const LoginPage: React.FC = () => {
         }
 
         setLocalStorage(responseObj);
+        setUser(responseObj.user);
     }
 
     if (isLoggedIn()) {

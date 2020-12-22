@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 // interfaces
@@ -14,7 +14,6 @@ import {
     AppBar,
     Toolbar,
     Typography,
-    Button,
     IconButton
 } from '@material-ui/core';
 
@@ -31,7 +30,7 @@ import { isLoggedIn } from '../../utils/auth';
 
 
 type Props = {
-    sideMenu: boolean
+    sideMenu: boolean,
 }
 
 const useStyles = makeStyles((theme: Theme) =>
