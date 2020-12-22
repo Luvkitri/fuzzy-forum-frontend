@@ -21,7 +21,9 @@ const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
             flexGrow: 1,
-            marginLeft: theme.spacing(30),
+            [theme.breakpoints.up('md')]: {
+                marginLeft: theme.spacing(30),
+            },
         },
         toolbar: theme.mixins.toolbar,
     }),
