@@ -1,26 +1,43 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useMemo } from 'react';
 import axios from 'axios';
-import { Entry } from '../../ts/interfaces/db_interfaces';
+
+// interfaces
+import { Entry, Thread } from '../../ts/interfaces/db_interfaces';
+
+// context
+import { EntriesContext } from '../../context/Entries'
 
 // components
 import Header from '../../components/Header';
-import List from '../../components/Preview/List'
+import List from '../../components/Preview/List';
+import AddEntryCard from '../../components/AddEntry/AddEntryCard';
 
 // @material-ui
 import CssBaseline from '@material-ui/core/CssBaseline';
 
 const HomePage: React.FC = () => {
     const [entries, setEntries] = useState<Entry[]>([]);
+    const [threads, setThreads] = useState<Thread[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [entriesRefreshKey, setEntriesRefreshKey] = useState<number>(0);
+
+    const memoizedEntries = useMemo(() => ({
+        entriesRefreshKey, 
+        setEntriesRefreshKey,
+        entries,
+        setEntries
+    }), [entriesRefreshKey, setEntriesRefreshKey, entries, setEntries]);
 
     useEffect(() => {
         const fetchItems = async () => {
-            const entriesRequest = axios.get('http://localhost:5000/entries');
+            const entriesRequest = axios.get(`${process.env.REACT_APP_API_URL}/entries`);
+            const threadsRequest = axios.get(`${process.env.REACT_APP_API_URL}/threads`);
 
             try {
-                const [entries] = await axios.all([entriesRequest]);
+                const [entries, threads] = await axios.all([entriesRequest, threadsRequest]);
 
                 setEntries(entries.data);
+                setThreads(threads.data);
                 setIsLoading(false);
             } catch (error) {
                 console.error(error.message)
@@ -28,13 +45,16 @@ const HomePage: React.FC = () => {
         }
 
         fetchItems();
-    }, []);
+    }, [entriesRefreshKey]);
 
     return (
         <div>
-            <CssBaseline />
-            <Header sideMenu={true} />
-            <List isLoading={isLoading} entries={entries} />
+            <EntriesContext.Provider value={memoizedEntries}>
+                <CssBaseline />
+                <Header sideMenu={true} />
+                <AddEntryCard numberOfEntries={entries.length} threads={threads} />
+                <List isLoading={isLoading} entries={entries} />
+            </EntriesContext.Provider>
         </div>
     );
 }
