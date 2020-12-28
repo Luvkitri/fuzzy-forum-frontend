@@ -1,3 +1,5 @@
+import { EntryThread } from './local_interfaces'
+
 export interface Entry {
     id: number;
     title: string;
@@ -10,10 +12,7 @@ export interface Entry {
     posted_at: string;
     edited_at: string;
     TagsInEntries: Tag[];
-    Thread: {
-        id: number;
-        name: string;
-    };
+    Thread: EntryThread;
     SubThreadsInEntry: SubThread[];
     User: {
         first_name: string,

@@ -1,7 +1,8 @@
 import React from 'react';
 
 // interfaces
-import { Tag } from '../../ts/interfaces/db_interfaces'
+import { Tag } from '../../ts/interfaces/db_interfaces';
+import { EntryThread } from '../../ts/interfaces/local_interfaces';
 
 // @material-ui components
 import { CardActions, Chip } from '@material-ui/core';
@@ -10,10 +11,7 @@ import { CardActions, Chip } from '@material-ui/core';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 
 type Props = {
-    thread: {
-        id: number,
-        name: string
-    },
+    thread: EntryThread,
     tags: Tag[]
 }
 

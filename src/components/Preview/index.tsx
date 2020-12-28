@@ -18,8 +18,6 @@ import {
     Avatar
 } from '@material-ui/core';
 
-
-
 type Props = {
     entry: Entry
 }
@@ -49,7 +47,8 @@ const EntryPreview: React.FC<Props> = ({ entry }) => {
 
     return (
         <Card className={classes.root}>
-            <CardHeader className={classes.header}
+            <CardHeader 
+                className={classes.header}
                 avatar={
                     <Avatar aria-label="recipe" className={classes.avatar}>
                         {entry.User.first_name.charAt(0)}
