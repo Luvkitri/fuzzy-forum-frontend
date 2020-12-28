@@ -12,6 +12,7 @@ import { UserContext } from './context/User';
 import Home from './containers/Home';
 import Login from './containers/Login';
 import Signup from './containers/Signup';
+import Entry from './containers/Entry';
 
 const App: React.FC = () => {
     const [user, setUser] = useState<LogedInUser | null>(null);
@@ -33,8 +34,9 @@ const App: React.FC = () => {
                     <UserContext.Provider value={memoizedUser}>
                         <Route path="/" exact component={Home} />
                         <Route path="/users/login" exact component={Login} />
+                        <Route path="/users/signup" exact component={Signup} />
+                        <Route path="/:entryId" exat component={Entry} />
                     </UserContext.Provider>
-                    <Route path="/users/signup" exact component={Signup} />
                     <Route path="/" render={() => <div><h1>404</h1></div>} />
                 </Switch>
             </BrowserRouter>
