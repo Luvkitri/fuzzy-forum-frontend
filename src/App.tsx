@@ -33,9 +33,9 @@ const App: React.FC = () => {
                 <Switch>
                     <UserContext.Provider value={memoizedUser}>
                         <Route path="/" exact component={Home} />
+                        <Route path="/:entryId" exact component={Entry} />
                         <Route path="/users/login" exact component={Login} />
                         <Route path="/users/signup" exact component={Signup} />
-                        <Route path="/:entryId" exat component={Entry} />
                     </UserContext.Provider>
                     <Route path="/" render={() => <div><h1>404</h1></div>} />
                 </Switch>
