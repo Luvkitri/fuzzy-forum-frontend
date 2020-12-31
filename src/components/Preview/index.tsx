@@ -1,4 +1,5 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 
 // Interfaces
 import { Entry } from '../../ts/interfaces/db_interfaces';
@@ -38,6 +39,9 @@ const useStyles = makeStyles({
     },
     countersContainer: {
         textAlign: "center"
+    },
+    titleArea: {
+        marginLeft: 10
     }
 });
 
@@ -45,9 +49,11 @@ const EntryPreview: React.FC<Props> = ({ entry }) => {
     const classes = useStyles();
     const posted_at: Date = new Date(Date.parse(entry.posted_at));
 
+    const history = useHistory();
+
     return (
         <Card className={classes.root}>
-            <CardHeader 
+            <CardHeader
                 className={classes.header}
                 avatar={
                     <Avatar aria-label="recipe" className={classes.avatar}>
@@ -64,12 +70,12 @@ const EntryPreview: React.FC<Props> = ({ entry }) => {
                 }
                 subheader={`${posted_at.toLocaleDateString()} at ${posted_at.toLocaleTimeString().slice(0, -3)}`}
             />
-            <CardActionArea>
-                <CardContent>
+            <CardActionArea onClick={() => history.push(`/${entry.id}`)}>
+                <CardContent className={classes.titleArea}>
                     <Typography variant="h6" component="h2">{entry.title}</Typography>
                 </CardContent>
             </CardActionArea>
-            <Footer thread={entry.Thread} tags={entry.TagsInEntries}/>
+            <Footer thread={entry.Thread} tags={entry.TagsInEntries} />
         </Card>
     )
 }

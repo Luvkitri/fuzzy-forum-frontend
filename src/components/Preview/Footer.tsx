@@ -17,6 +17,10 @@ type Props = {
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
+        root: {
+            marginLeft: 10,
+            padding: 8
+        },
         chip: {
             margin: theme.spacing(0.5),
         }
@@ -27,7 +31,7 @@ const Footer: React.FC<Props> = ({ thread, tags }) => {
     const classes = useStyles();
 
     return (
-        <CardActions>
+        <CardActions className={classes.root}>
             <Chip
                 label={thread.name}
                 clickable
