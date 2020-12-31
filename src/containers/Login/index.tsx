@@ -155,7 +155,6 @@ const LoginPage: React.FC = () => {
                     </Grid>
                 </form>
             </Paper>
-
         </div>
     );
 }

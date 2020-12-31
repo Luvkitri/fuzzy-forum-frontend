@@ -20,13 +20,16 @@ const HomePage: React.FC = () => {
     const [threads, setThreads] = useState<Thread[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [entriesRefreshKey, setEntriesRefreshKey] = useState<number>(0);
+    const [selectedRange, setSelectedRange] = useState<string>('');
 
     const memoizedEntries = useMemo(() => ({
         entriesRefreshKey, 
         setEntriesRefreshKey,
         entries,
-        setEntries
-    }), [entriesRefreshKey, setEntriesRefreshKey, entries, setEntries]);
+        setEntries,
+        selectedRange,
+        setSelectedRange
+    }), [entriesRefreshKey, setEntriesRefreshKey, entries, setEntries, selectedRange, setSelectedRange]);
 
     useEffect(() => {
         const fetchItems = async () => {
@@ -39,13 +42,14 @@ const HomePage: React.FC = () => {
                 setEntries(entries.data);
                 setThreads(threads.data);
                 setIsLoading(false);
+                setSelectedRange('');
             } catch (error) {
                 console.error(error.message)
             }
         }
 
         fetchItems();
-    }, [entriesRefreshKey]);
+    }, [entriesRefreshKey, setEntriesRefreshKey, setEntries]);
 
     return (
         <div>
