@@ -47,6 +47,9 @@ const useStyles = makeStyles((theme: Theme) =>
         header: {
             flex: 0.5
         },
+        actions: {
+            marginLeft: 10
+        }
     }),
 );
 
@@ -54,7 +57,7 @@ const AddEntryCard: React.FC<Props> = ({ numberOfEntries, threads }) => {
     const classes = useStyles();
     const [open, setOpen] = useState(false);
 
-    const { entriesRefreshKey, setEntriesRefreshKey } = useContext<EntriesContextType>(EntriesContext);
+    const { entriesRefreshKey, setEntriesRefreshKey, selectedRange } = useContext<EntriesContextType>(EntriesContext);
 
 
     const handleOpen = () => {
@@ -75,12 +78,12 @@ const AddEntryCard: React.FC<Props> = ({ numberOfEntries, threads }) => {
                         className={classes.header}
                         title={
                             <Typography variant="h4" component="h2">
-                                Forum Entries
+                                Forum Entries{selectedRange !== '' && `: ${selectedRange}`}
                             </Typography>
                         }
                         subheader={`Total entries ${numberOfEntries}`}
                     />
-                    <CardActions>
+                    <CardActions className={classes.actions}>
                         <Button size="large" color="primary" onClick={handleOpen}>Add Entry</Button>
                     </CardActions>
                 </Card>
