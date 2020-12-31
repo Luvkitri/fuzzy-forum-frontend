@@ -11,4 +11,11 @@ export type EntriesContextType = {
     setEntriesRefreshKey: (refreshKey: number) => void,
     entries: Entry[],
     setEntries: (entries: Entry[]) => void,
+    selectedRange: string,
+    setSelectedRange: (selectedRange: string) => void,
+}
+
+export type EntryContextType = {
+    entryRefreshKey: number,
+    setEntryRefreshKey: (refreshKey: number) => void,
 }
