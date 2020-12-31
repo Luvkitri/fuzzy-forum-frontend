@@ -1,6 +1,13 @@
-import React from 'react'
+import React, { useContext } from 'react'
 
+// interfaces
 import { Thread } from '../../ts/interfaces/db_interfaces';
+
+// types
+import { EntriesContextType } from '../../ts/types/context_types';
+
+// context
+import { EntriesContext } from '../../context/Entries';
 
 // Components
 import SideMenuThread from './SideMenuThread';
@@ -10,6 +17,8 @@ import {
     List,
     Divider,
     Typography,
+    ListItem,
+    ListItemText
 } from '@material-ui/core'
 
 // @material-ui styles
@@ -37,16 +46,21 @@ const useStyles = makeStyles(() =>
 const SideMenuList: React.FC<Props> = ({ threads }) => {
     const classes = useStyles();
 
+    const { entriesRefreshKey, setEntriesRefreshKey } = useContext<EntriesContextType>(EntriesContext);
+
     return (
         <div>
-            <div className={classes.toolbar}> 
+            <div className={classes.toolbar}>
                 <Typography className={classes.title}>Fuzzy Forum</Typography>
                 <Typography>v 0.0.1</Typography>
             </div>
             <Divider />
             <List>
+                <ListItem button onClick={() => setEntriesRefreshKey(entriesRefreshKey + 1)}>
+                    <ListItemText primary="All" />
+                </ListItem>
                 {threads.map((thread) => (
-                    <SideMenuThread key={thread.id} name={thread.name} subThreads={thread.SubThreads} />
+                    <SideMenuThread id={thread.id} name={thread.name} subThreads={thread.SubThreads} />
                 ))}
             </List>
         </div>

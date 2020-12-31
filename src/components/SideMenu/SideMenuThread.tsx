@@ -21,7 +21,7 @@ import {
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 
 type Props = {
-    key: number
+    id: number
     name: string
     subThreads: SubThread[]
 }
@@ -34,13 +34,13 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-const Thread: React.FC<Props> = ({ key, name, subThreads }) => {
+const Thread: React.FC<Props> = ({ id, name, subThreads }) => {
     const classes = useStyles();
 
-    const [isSending, setIsSending] = useState(false)
-    const isMounted = useRef(true)
+    const [isSending, setIsSending] = useState<boolean>(false);
+    const isMounted = useRef(true);
 
-    const { entries, setEntries } = useContext<EntriesContextType>(EntriesContext);
+    const { setEntries, setSelectedRange } = useContext<EntriesContextType>(EntriesContext);
 
     useEffect(() => {
         return () => {
@@ -48,16 +48,14 @@ const Thread: React.FC<Props> = ({ key, name, subThreads }) => {
         }
     }, [])
 
-    const handleThreadClick = useCallback(async (threadId: number) => {
+    const handleThreadClick = useCallback(async (threadId: number, threadName: string) => {
         if (isSending) {
             return;
         }
 
-        console.log(threadId);
-
         setIsSending(true);
 
-        const res = await authAxios.get(`${process.env.REACT_APP_API_URL}/entries/${threadId}`)
+        const res = await authAxios.get(`${process.env.REACT_APP_API_URL}/entries/thread/${threadId}`)
         const responseObj = res.data;
 
         if (!responseObj.success) {
@@ -65,34 +63,46 @@ const Thread: React.FC<Props> = ({ key, name, subThreads }) => {
         }
 
         setEntries(responseObj.entries);
+        setSelectedRange(threadName);
 
         if (isMounted.current) {
             setIsSending(false);
         }
 
-    }, [isSending])
+    }, [isSending, setEntries, setSelectedRange])
 
-    const handleSubThreadClick = useCallback(async (subThreadId) => {
-        // don't send again while we are sending
-        if (isSending) return
-        // update state
-        setIsSending(true)
-        // send the actual request
-        // once the request is sent, update state again
-        if (isMounted.current) // only update if we are still mounted
-            setIsSending(false)
-    }, [isSending])
+    const handleSubThreadClick = useCallback(async (subThreadId: number, subThreadName: string) => {
+        if (isSending) {
+            return;
+        }
+
+        setIsSending(true);
+
+        const res = await authAxios.get(`${process.env.REACT_APP_API_URL}/entries/subthread/${subThreadId}`)
+        const responseObj = res.data;
+
+        if (!responseObj.success) {
+            console.log(responseObj.error);
+        }
+
+        setEntries(responseObj.entries);
+        setSelectedRange(subThreadName);
+
+        if (isMounted.current) {
+            setIsSending(false);
+        }
+    }, [isSending, setEntries, setSelectedRange])
 
     return (
         <div>
-            <ListItem key={key} disabled={isSending} button onClick={async () => { await handleThreadClick(key); }}>
+            <ListItem key={id} disabled={isSending} button onClick={async () => { await handleThreadClick(id, name); }}>
                 <ListItemText primary={name} />
             </ListItem>
 
 
             <List component="div" disablePadding>
                 {subThreads.map((subThread) => (
-                    <ListItem key={subThread.id} disabled={isSending} button className={classes.nested} onClick={handleSubThreadClick}>
+                    <ListItem key={subThread.id} disabled={isSending} button className={classes.nested} onClick={async () => { await handleSubThreadClick(subThread.id, subThread.name) }}>
                         <ListItemText primary={subThread.name} />
                     </ListItem>
                 ))}
