@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import axios from 'axios';
 
 // interfaces
@@ -60,6 +60,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const Header: React.FC<Props> = ({ sideMenu }) => {
     const classes = useStyles();
+    const location = useLocation();
 
     const [threads, setThreads] = useState<Thread[]>([]);
     const [mobileOpen, setMobileOpen] = useState<boolean>(false);
@@ -104,7 +105,7 @@ const Header: React.FC<Props> = ({ sideMenu }) => {
                         </IconButton>
                     }
                     <Typography variant="h6" className={classes.title}>
-                        <Link to="/" className={classes.link}>Fuzzy-Forum</Link>
+                        <Link to="/" onClick={() => location.pathname === '/' && window.location.reload()} className={classes.link}>Fuzzy-Forum</Link>
                     </Typography>
                     <Controls />
                 </Toolbar>
