@@ -1,23 +1,18 @@
 import React, { useContext } from 'react';
-import { Redirect, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { isLoggedIn, logout } from '../../utils/auth';
-
-// types
-import { UserContextType } from '../../ts/types/context_types';
 
 // context
 import { UserContext } from '../../context/User';
+import { UserContextType } from '../../ts/types/context_types';
 
 // @material-ui components
 import {
-    Typography,
-    Button,
-    Avatar
+    Button
 } from '@material-ui/core';
 
 // @material-ui icons
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-
 
 
 const Controls: React.FC = () => {

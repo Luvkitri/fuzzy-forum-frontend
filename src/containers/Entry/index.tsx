@@ -17,7 +17,10 @@ import { EntryContext } from '../../context/Entries';
 import { CssBaseline } from '@material-ui/core';
 
 const EntryPage: React.FC = () => {
+    // Path params
     const { entryId } = useParams<{ entryId: string }>();
+    
+    // States
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [entry, setEntry] = useState<WholeEntry>(Object);
     const [entryRefreshKey, setEntryRefreshKey] = useState<number>(0);

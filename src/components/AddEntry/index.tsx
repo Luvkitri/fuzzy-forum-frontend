@@ -1,20 +1,14 @@
 import React, { useState, useContext } from 'react';
-
-
 import { getAuthAxios } from '../../utils/auth';
 
 // interfaces
 import { Thread, Tag } from '../../ts/interfaces/db_interfaces';
 import { AppAlert } from '../../ts/interfaces/local_interfaces';
 
-// types
-import { EntriesContextType, UserContextType } from '../../ts/types/context_types';
-
 // context
 import { UserContext } from '../../context/User';
 import { EntriesContext } from '../../context/Entries';
-
-
+import { EntriesContextType, UserContextType } from '../../ts/types/context_types';
 
 // @material-ui components
 import {
@@ -96,12 +90,11 @@ const AddEntry: React.FC<Props> = ({ threads }) => {
     const { user } = useContext<UserContextType>(UserContext);
     const { entriesRefreshKey, setEntriesRefreshKey } = useContext<EntriesContextType>(EntriesContext);
 
-    // Form content states
+    // States
     const [thread, setThread] = useState<string>('');
     const [title, setTitle] = useState<string>('');
     const [content, setContent] = useState<string>('');
     const [selectedTags, setSelectedTags] = useState<Array<string>>([]);
-
     const [tags, setTags] = useState<Tag[]>([]);
     const [currentWrittenTag, setCurrentWrittenTag] = useState<string | null>('');
     const [selectError, setSelectError] = useState<boolean>(true);

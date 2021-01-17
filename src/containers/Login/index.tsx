@@ -77,13 +77,13 @@ const useStyles = makeStyles((theme: Theme) =>
 const LoginPage: React.FC = () => {
     const classes = useStyles();
 
-    // states
+    // States
     const [alert, setAlert] = useState<AppAlert>({ active: false, type: 'error', msg: '' })
 
-    // context
+    // Context
     const { setUser } = useContext<UserContextType>(UserContext);
 
-    // form hook
+    // Form Hook
     const { register, handleSubmit } = useForm();
 
     const onSubmit = async (loginData: LoginData) => {

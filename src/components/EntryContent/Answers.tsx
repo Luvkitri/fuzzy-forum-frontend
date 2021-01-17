@@ -5,21 +5,31 @@ import { getAuthAxios } from '../../utils/auth';
 // interfaces
 import { Answer } from '../../ts/interfaces/db_interfaces';
 
-// components
-import CodeBlock from './CodeBlock';
-import ScoreControl from './ScoreControl';
-
 // context
 import { UserContext } from '../../context/User';
 import { EntryContext } from '../../context/Entries';
 import { EntryContextType } from '../../ts/types/context_types';
 import { UserContextType } from '../../ts/types/context_types';
 
-// @material-ui styles
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+// components
+import CodeBlock from './CodeBlock';
+import ScoreControl from './ScoreControl';
 
 // @material-ui components
-import { Button, Divider, CardHeader, TextField, Avatar, CardContent, Typography, Paper, Link } from '@material-ui/core';
+import {
+    Button,
+    Divider,
+    CardHeader,
+    TextField,
+    Avatar,
+    CardContent,
+    Typography,
+    Paper,
+    Link
+} from '@material-ui/core';
+
+// @material-ui styles
+import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 
 type Props = {
     entryId: number,
@@ -55,8 +65,10 @@ const Answers: React.FC<Props> = ({ entryId, answers }) => {
     const { user } = useContext<UserContextType>(UserContext);
     const { entryRefreshKey, setEntryRefreshKey, setAlert } = useContext<EntryContextType>(EntryContext);
 
+    // States
     const [answerContent, setAnswerContent] = useState<string>('');
     const [isSending, setIsSending] = useState<boolean>(false);
+    
     const isMounted = useRef(true);
 
     const isAnswerFilled = answerContent.length !== 0;

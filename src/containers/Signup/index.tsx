@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useForm } from "react-hook-form";
 import axios from 'axios';
@@ -69,9 +69,9 @@ const useStyles = makeStyles((theme: Theme) =>
 const SignupPage: React.FC = () => {
     const classes = useStyles();
     const history = useHistory();
-    const { register, handleSubmit, errors, watch } = useForm();
 
-    //const [registered, setRegistered] = useState<boolean>(false);
+    // Hook Form
+    const { register, handleSubmit, errors, watch } = useForm();
 
     const password = useRef({});
     password.current = watch("password", "");
@@ -88,7 +88,6 @@ const SignupPage: React.FC = () => {
     }
 
     if (isLoggedIn()) {
-        console.log("HELLO?");
         history.goBack();
     }
 

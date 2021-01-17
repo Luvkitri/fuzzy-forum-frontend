@@ -1,9 +1,9 @@
 import React from 'react';
 
-// Interfaces
+// interfaces
 import { Entry } from '../../ts/interfaces/db_interfaces';
 
-// Compontents
+// compontents
 import Preview from '.';
 
 // @material-ui components

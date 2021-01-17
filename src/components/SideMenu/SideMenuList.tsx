@@ -3,13 +3,11 @@ import React, { useContext } from 'react'
 // interfaces
 import { Thread } from '../../ts/interfaces/db_interfaces';
 
-// types
-import { EntriesContextType } from '../../ts/types/context_types';
-
 // context
 import { EntriesContext } from '../../context/Entries';
+import { EntriesContextType } from '../../ts/types/context_types';
 
-// Components
+// components
 import SideMenuThread from './SideMenuThread';
 
 // @material-ui components
@@ -46,6 +44,7 @@ const useStyles = makeStyles(() =>
 const SideMenuList: React.FC<Props> = ({ threads }) => {
     const classes = useStyles();
 
+    // Context
     const { entriesRefreshKey, setEntriesRefreshKey } = useContext<EntriesContextType>(EntriesContext);
 
     return (

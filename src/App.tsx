@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
-import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
-import { isLoggedIn, getUserData, isLoggedOut, logout } from './utils/auth';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { isLoggedIn, getUserData } from './utils/auth';
 
 // interfaces
 import { LogedInUser } from './ts/interfaces/res_interfaces';

@@ -18,7 +18,6 @@ import {
     Typography,
     Avatar
 } from '@material-ui/core';
-import { threadId } from 'worker_threads';
 
 type Props = {
     entry: Entry

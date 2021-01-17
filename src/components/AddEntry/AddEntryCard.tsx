@@ -3,11 +3,9 @@ import React, { useState, useContext } from 'react';
 // interfaces
 import { Thread } from '../../ts/interfaces/db_interfaces';
 
-// types
-import { EntriesContextType } from '../../ts/types/context_types';
-
 // context
 import { EntriesContext } from '../../context/Entries';
+import { EntriesContextType } from '../../ts/types/context_types';
 
 // components
 import AddEntry from './index';
@@ -58,10 +56,12 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const AddEntryCard: React.FC<Props> = ({ numberOfEntries, threads }) => {
     const classes = useStyles();
+    
+    // States
     const [open, setOpen] = useState(false);
 
+    // Context
     const { entriesRefreshKey, setEntriesRefreshKey, selectedRange } = useContext<EntriesContextType>(EntriesContext);
-
 
     const handleOpen = () => {
         setOpen(true);

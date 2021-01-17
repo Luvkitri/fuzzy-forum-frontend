@@ -12,10 +12,11 @@ import Header from '../../components/Header';
 import List from '../../components/Preview/List';
 import AddEntryCard from '../../components/AddEntry/AddEntryCard';
 
-// @material-ui
+// @material-ui components
 import CssBaseline from '@material-ui/core/CssBaseline';
 
 const HomePage: React.FC = () => {
+    // States
     const [entries, setEntries] = useState<Entry[]>([]);
     const [threads, setThreads] = useState<Thread[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);

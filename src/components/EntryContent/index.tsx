@@ -100,6 +100,8 @@ const useStyles = makeStyles((theme: Theme) =>
 const EntryContent: React.FC<Props> = ({ isLoading, entry }) => {
     const classes = useStyles();
     const posted_at: Date = new Date(Date.parse(entry.posted_at));
+
+    // Context
     const { alert, setAlert } = useContext<EntryContextType>(EntryContext);
 
     if (isLoading) {

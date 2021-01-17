@@ -1,4 +1,5 @@
-import React, { useContext } from 'react'
+import React, { useContext } from 'react';
+import { getAuthAxios } from '../../utils/auth';
 
 // types
 import { EntryContextType, UserContextType } from '../../ts/types/context_types';
@@ -16,7 +17,7 @@ import { Typography, Box, IconButton } from '@material-ui/core';
 // @material-ui icons
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
-import { getAuthAxios, getJWT } from '../../utils/auth';
+
 
 type Props = {
     type: string,
