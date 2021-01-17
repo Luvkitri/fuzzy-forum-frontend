@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import ReactMarkdown from 'react-markdown'
 
 // interfaces
 import { WholeEntry } from '../../ts/interfaces/db_interfaces';
+
+// context
+import { EntryContext } from '../../context/Entries';
+import { EntryContextType } from '../../ts/types/context_types';
 
 // components
 import ScoreControl from './ScoreControl';
@@ -11,24 +15,31 @@ import CodeBlock from './CodeBlock';
 import Footer from '../Preview/Footer'
 
 // @material-ui styles
-import { 
+import {
     makeStyles,
     createStyles,
     Theme,
     createMuiTheme,
-    ThemeProvider 
+    ThemeProvider
 } from '@material-ui/core/styles';
 
+// @material-ui icons
+import CloseIcon from '@material-ui/icons/Close'
+
 // @material-ui components
-import { 
+import {
     Card,
     CardHeader,
-    Container, 
+    Container,
     Avatar,
     CardContent,
     Typography,
-    Divider
+    Divider,
+    IconButton
 } from '@material-ui/core';
+
+// @material-ui lab
+import { Alert } from '@material-ui/lab/';
 
 
 type Props = {
@@ -89,6 +100,7 @@ const useStyles = makeStyles((theme: Theme) =>
 const EntryContent: React.FC<Props> = ({ isLoading, entry }) => {
     const classes = useStyles();
     const posted_at: Date = new Date(Date.parse(entry.posted_at));
+    const { alert, setAlert } = useContext<EntryContextType>(EntryContext);
 
     if (isLoading) {
         return <div></div>
@@ -97,6 +109,25 @@ const EntryContent: React.FC<Props> = ({ isLoading, entry }) => {
     return (
         <Container className={classes.root}>
             <div className={classes.toolbar} />
+            {alert.active &&
+                <Alert
+                    action={
+                        <IconButton
+                            aria-label="close"
+                            color="inherit"
+                            size="small"
+                            onClick={() => {
+                                setAlert({ active: false, type: 'error', msg: '' });
+                            }}
+                        >
+                            <CloseIcon fontSize="inherit" />
+                        </IconButton>
+                    }
+                    severity={alert.type}
+                >
+                    {alert.msg}
+                </Alert>
+            }
             <Card className={classes.card}>
                 <ThemeProvider theme={actionTheme}>
                     <CardHeader
@@ -109,7 +140,7 @@ const EntryContent: React.FC<Props> = ({ isLoading, entry }) => {
                         title={`${entry.User.first_name} ${entry.User.last_name}`}
                         subheader={`${posted_at.toLocaleDateString()} at ${posted_at.toLocaleTimeString().slice(0, -3)}`}
                         action={
-                            <ScoreControl score={entry.score} />
+                            <ScoreControl type={"entry"} id={entry.id} score={entry.score} />
                         }
                     />
                 </ThemeProvider>
@@ -128,10 +159,10 @@ const EntryContent: React.FC<Props> = ({ isLoading, entry }) => {
                     }} />
                 </CardContent>
                 <Divider light />
-                <Footer thread={entry.Thread} tags={entry.TagsInEntries}/>
+                <Footer thread={entry.Thread} tags={entry.TagsInEntries} />
             </Card>
             <Answers entryId={entry.id} answers={entry.Answers} />
-        </Container>
+        </Container >
     )
 }
 
