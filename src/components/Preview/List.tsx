@@ -39,7 +39,7 @@ const List: React.FC<Props> = ({ isLoading, entries }) => {
         <div className={classes.root}>
             <Container maxWidth="xl">
                 {entries.filter(entry => entry.active).map(entry => (
-                    <Preview entry={entry} />
+                    <Preview key={entry.id} entry={entry} />
                 ))}
             </Container>
         </div>

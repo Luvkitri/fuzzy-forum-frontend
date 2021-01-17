@@ -40,6 +40,7 @@ const Footer: React.FC<Props> = ({ thread, tags }) => {
             />
             {tags.map(tag => (
                 <Chip
+                    key={tag.id}
                     label={tag.name}
                     clickable
                     color="primary"

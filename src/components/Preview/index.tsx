@@ -18,6 +18,7 @@ import {
     Typography,
     Avatar
 } from '@material-ui/core';
+import { threadId } from 'worker_threads';
 
 type Props = {
     entry: Entry
@@ -64,7 +65,6 @@ const EntryPreview: React.FC<Props> = ({ entry }) => {
                 action={
                     <React.Fragment>
                         <Counter name="Score" value={entry.score} />
-                        <Counter name="Views" value={entry.views} />
                         <Counter name="Answers" value={entry.answers} />
                     </React.Fragment>
                 }

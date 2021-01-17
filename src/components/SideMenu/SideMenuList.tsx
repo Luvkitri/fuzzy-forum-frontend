@@ -60,7 +60,7 @@ const SideMenuList: React.FC<Props> = ({ threads }) => {
                     <ListItemText primary="All" />
                 </ListItem>
                 {threads.map((thread) => (
-                    <SideMenuThread id={thread.id} name={thread.name} subThreads={thread.SubThreads} />
+                    <SideMenuThread key={thread.id} id={thread.id} name={thread.name} subThreads={thread.SubThreads} />
                 ))}
             </List>
         </div>

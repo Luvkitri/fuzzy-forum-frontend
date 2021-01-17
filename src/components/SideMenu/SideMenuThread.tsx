@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback, useContext } from 'react';
-import { authAxios } from '../../utils/auth';
+import { getAuthAxios } from '../../utils/auth';
 
 // interfaces
 import { SubThread } from '../../ts/interfaces/db_interfaces'
@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-const Thread: React.FC<Props> = ({ id, name, subThreads }) => {
+const SideMenuThread: React.FC<Props> = ({ id, name, subThreads }) => {
     const classes = useStyles();
 
     const [isSending, setIsSending] = useState<boolean>(false);
@@ -55,6 +55,7 @@ const Thread: React.FC<Props> = ({ id, name, subThreads }) => {
 
         setIsSending(true);
 
+        const authAxios = getAuthAxios();
         const res = await authAxios.get(`${process.env.REACT_APP_API_URL}/entries/thread/${threadId}`)
         const responseObj = res.data;
 
@@ -78,6 +79,7 @@ const Thread: React.FC<Props> = ({ id, name, subThreads }) => {
 
         setIsSending(true);
 
+        const authAxios = getAuthAxios();
         const res = await authAxios.get(`${process.env.REACT_APP_API_URL}/entries/subthread/${subThreadId}`)
         const responseObj = res.data;
 
@@ -111,4 +113,4 @@ const Thread: React.FC<Props> = ({ id, name, subThreads }) => {
     );
 }
 
-export default Thread;
+export default SideMenuThread;

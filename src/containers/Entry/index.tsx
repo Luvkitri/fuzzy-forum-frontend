@@ -4,28 +4,31 @@ import axios from 'axios';
 
 // interfaces
 import { WholeEntry } from '../../ts/interfaces/db_interfaces';
+import { AppAlert } from '../../ts/interfaces/local_interfaces';
 
 // components
 import Header from '../../components/Header';
 import EntryContent from '../../components/EntryContent';
 
 // context
-import { EntryContextType } from '../../ts/types/context_types';
 import { EntryContext } from '../../context/Entries';
 
-// @material-ui
-import CssBaseline from '@material-ui/core/CssBaseline';
+// @material-ui components
+import { CssBaseline } from '@material-ui/core';
 
 const EntryPage: React.FC = () => {
     const { entryId } = useParams<{ entryId: string }>();
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [entry, setEntry] = useState<WholeEntry>(Object);
     const [entryRefreshKey, setEntryRefreshKey] = useState<number>(0);
+    const [alert, setAlert] = useState<AppAlert>({ active: false, type: 'error', msg: '' });
 
     const memoizedEntry = useMemo(() => ({
         entryRefreshKey,
-        setEntryRefreshKey
-    }), [entryRefreshKey, setEntryRefreshKey])
+        setEntryRefreshKey,
+        alert,
+        setAlert
+    }), [entryRefreshKey, setEntryRefreshKey, alert, setAlert])
 
     useEffect(() => {
         const fetchEntry = async () => {

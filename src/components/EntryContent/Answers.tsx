@@ -1,10 +1,9 @@
 import React, { useCallback, useState, useEffect, useRef, useContext } from 'react';
 import ReactMarkdown from 'react-markdown';
-import { authAxios } from '../../utils/auth';
+import { getAuthAxios } from '../../utils/auth';
 
 // interfaces
 import { Answer } from '../../ts/interfaces/db_interfaces';
-import { AppAlert } from '../../ts/interfaces/local_interfaces';
 
 // components
 import CodeBlock from './CodeBlock';
@@ -21,9 +20,6 @@ import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 
 // @material-ui components
 import { Button, Divider, CardHeader, TextField, Avatar, CardContent, Typography, Paper, Link } from '@material-ui/core';
-
-// @material-ui lab
-import { Alert } from '@material-ui/lab/';
 
 type Props = {
     entryId: number,
@@ -44,7 +40,10 @@ const useStyles = makeStyles((theme: Theme) =>
             padding: 16
         },
         content: {
-            margin: 10,
+            margin: 10
+        },
+        text: {
+            whiteSpace: 'pre-wrap',
         },
     })
 )
@@ -54,13 +53,11 @@ const Answers: React.FC<Props> = ({ entryId, answers }) => {
 
     // Context
     const { user } = useContext<UserContextType>(UserContext);
-    const { entryRefreshKey, setEntryRefreshKey } = useContext<EntryContextType>(EntryContext);
+    const { entryRefreshKey, setEntryRefreshKey, setAlert } = useContext<EntryContextType>(EntryContext);
 
     const [answerContent, setAnswerContent] = useState<string>('');
     const [isSending, setIsSending] = useState<boolean>(false);
     const isMounted = useRef(true);
-
-    const [alert, setAlert] = useState<AppAlert>({ active: false, type: 'error', msg: '' })
 
     const isAnswerFilled = answerContent.length !== 0;
 
@@ -77,8 +74,9 @@ const Answers: React.FC<Props> = ({ entryId, answers }) => {
             return;
         }
 
-        if (user === null) {
-            setAlert({ active: true, type: 'error', msg: 'User is not loggedin' });
+        if (user === null || user === undefined) {
+            setAlert({ active: true, type: 'error', msg: 'User is not logged in' });
+            window.scrollTo(0, 0);
             return;
         }
 
@@ -93,6 +91,7 @@ const Answers: React.FC<Props> = ({ entryId, answers }) => {
 
             console.log(answerObj);
 
+            const authAxios = getAuthAxios();
             const res = await authAxios.post(`${process.env.REACT_APP_API_URL}/answers/add`, answerObj)
             const responseObj = res.data;
 
@@ -101,22 +100,24 @@ const Answers: React.FC<Props> = ({ entryId, answers }) => {
             }
 
             setEntryRefreshKey(entryRefreshKey + 1);
+            setAnswerContent('');
+            setIsSending(false);
 
         } catch (error) {
             console.log(error);
         }
-    }, [answerContent, entryId, isSending, user]);
+    }, [answerContent, entryId, isSending, user, entryRefreshKey, setAlert, setEntryRefreshKey]);
 
     return (
         <Paper className={classes.root}>
             {answers.length > 0 &&
                 <Typography variant="h5" style={{ padding: 16 }} >{answers.length} Answers</Typography>
             }
-            {answers.map(answer => {
+            {answers.sort((a, b) => { return b.score - a.score }).map(answer => {
                 const posted_at: Date = new Date(Date.parse(answer.posted_at));
 
                 return (
-                    <div>
+                    <div key={answer.id}>
                         <CardHeader
                             className={classes.header}
                             subheader={`${posted_at.toLocaleDateString()} at ${posted_at.toLocaleTimeString().slice(0, -3)}`}
@@ -127,14 +128,14 @@ const Answers: React.FC<Props> = ({ entryId, answers }) => {
                                 </Avatar>
                             }
                             action={
-                                <ScoreControl score={answer.score} />
+                                <ScoreControl type={"answer"} id={answer.id} score={answer.score} />
                             }
                         />
                         <CardContent>
                             <ReactMarkdown className={classes.content} children={answer.content} renderers={{
                                 code: CodeBlock,
                                 paragraph: ({ children }) => (
-                                    <Typography variant="body1">
+                                    <Typography className={classes.text} variant="body1">
                                         {children}
                                     </Typography>
                                 ),
@@ -144,7 +145,6 @@ const Answers: React.FC<Props> = ({ entryId, answers }) => {
                     </div>
                 )
             })}
-            {alert.active && <Alert severity={alert.type}>{alert.msg}</Alert>}
             <Typography variant="h5" style={{ padding: 16, marginTop: 10 }} >Your Answer</Typography>
             <form className={classes.form} onSubmit={e => addAnswer(e)}>
                 <TextField

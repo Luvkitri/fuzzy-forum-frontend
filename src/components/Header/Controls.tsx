@@ -28,13 +28,16 @@ const Controls: React.FC = () => {
         return (
             <React.Fragment>
                 <Button color="inherit" onClick={() => {
-                    console.log(user);
+                    if (user) {
+                        history.push(`/users/profile/${user.id}`)
+                    }
                 }}>
                     {user && user.login}
                 </Button>
                 <Button color="inherit" onClick={() => {
                     logout();
                     setUser(null);
+                    history.push('/users/login');
                 }}>
                     <ExitToAppIcon />
                 </Button>

@@ -1,16 +1,20 @@
 import React, { useState, useContext } from 'react';
 
 
-import { authAxios } from '../../utils/auth';
+import { getAuthAxios } from '../../utils/auth';
 
 // interfaces
 import { Thread, Tag } from '../../ts/interfaces/db_interfaces';
 import { AppAlert } from '../../ts/interfaces/local_interfaces';
 
+// types
+import { EntriesContextType, UserContextType } from '../../ts/types/context_types';
+
 // context
 import { UserContext } from '../../context/User';
 import { EntriesContext } from '../../context/Entries';
-import { EntriesContextType, UserContextType } from '../../ts/types/context_types';
+
+
 
 // @material-ui components
 import {
@@ -52,7 +56,6 @@ const useStyles = makeStyles((theme: Theme) =>
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            borderRadius: 5,
         },
         toolbar: theme.mixins.toolbar,
         form: {
@@ -90,7 +93,7 @@ const AddEntry: React.FC<Props> = ({ threads }) => {
     const classes = useStyles();
 
     // Context
-    const { user } = useContext<UserContextType>(UserContext)
+    const { user } = useContext<UserContextType>(UserContext);
     const { entriesRefreshKey, setEntriesRefreshKey } = useContext<EntriesContextType>(EntriesContext);
 
     // Form content states
@@ -127,6 +130,7 @@ const AddEntry: React.FC<Props> = ({ threads }) => {
             entryTags: selectedTags
         }
 
+        const authAxios = getAuthAxios();
         const res = await authAxios.post(`${process.env.REACT_APP_API_URL}/entries/add`, entryData);
         const responseObj = res.data;
 
@@ -214,8 +218,9 @@ const AddEntry: React.FC<Props> = ({ threads }) => {
                             className={classes.chip}
                         />
                     }
-                    {selectedTags.map((tag) => (
+                    {selectedTags.map((tag, index) => (
                         <Chip
+                            key={index}
                             label={tag}
                             onDelete={removeTag(tag)}
                             color="primary"
@@ -238,7 +243,7 @@ const AddEntry: React.FC<Props> = ({ threads }) => {
                                 <em>None</em>
                             </MenuItem>
                             {threads.map(thread => (
-                                <MenuItem value={thread.name}>{thread.name}</MenuItem>
+                                <MenuItem key={thread.id} value={thread.name}>{thread.name}</MenuItem>
                             ))}
                         </Select>
                     </FormControl>

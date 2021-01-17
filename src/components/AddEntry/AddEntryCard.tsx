@@ -49,6 +49,9 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         actions: {
             marginLeft: 10
+        },
+        modal: {
+            outline: 'none'
         }
     }),
 );
@@ -93,7 +96,9 @@ const AddEntryCard: React.FC<Props> = ({ numberOfEntries, threads }) => {
                 onClose={handleClose}
                 aria-labelledby="modal-title"
             >
-                <AddEntry threads={threads} />
+                <div className={classes.modal}>
+                    <AddEntry threads={threads} />
+                </div>
             </Modal>
         </div>
     )
