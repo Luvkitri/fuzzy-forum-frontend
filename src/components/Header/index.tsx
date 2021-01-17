@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import axios from 'axios';
 
 // interfaces
@@ -6,13 +7,17 @@ import { Thread } from '../../ts/interfaces/db_interfaces'
 
 // components
 import SideMenu from '../SideMenu';
+import Controls from './Controls';
+
+// context
+import { EntriesContext } from '../../context/Entries';
+import { EntriesContextType } from '../../ts/types/context_types';
 
 // @material-ui components
 import {
     AppBar,
     Toolbar,
     Typography,
-    Button,
     IconButton
 } from '@material-ui/core';
 
@@ -25,6 +30,11 @@ import {
 
 // @material-ui icons
 import MenuIcon from '@material-ui/icons/Menu';
+
+
+type Props = {
+    sideMenu: boolean,
+}
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -44,17 +54,31 @@ const useStyles = makeStyles((theme: Theme) =>
         title: {
             flexGrow: 1,
         },
+        link: {
+            textDecoration: 'none',
+            color: 'white'
+        },
     }),
 );
 
-const Header: React.FC = () => {
+const Header: React.FC<Props> = ({ sideMenu }) => {
     const classes = useStyles();
+    const location = useLocation();
 
+    // Context
+    const { entriesRefreshKey } = useContext<EntriesContextType>(EntriesContext)
+
+    // States
     const [threads, setThreads] = useState<Thread[]>([]);
+    const [mobileOpen, setMobileOpen] = useState<boolean>(false);
+
+    const handleDrawerToggle = () => {
+        setMobileOpen(!mobileOpen);
+    }
 
     useEffect(() => {
         const fetchItems = async () => {
-            const threadsRequest = axios.get('http://localhost:5000/threads');
+            const threadsRequest = axios.get(`${process.env.REACT_APP_API_URL}/threads`);
 
             try {
                 const [threads] = await axios.all([threadsRequest]);
@@ -65,33 +89,33 @@ const Header: React.FC = () => {
             }
         }
 
-        fetchItems();
-    }, []);
-
-
-    const handleDrawerToggle = () => {
-    };
+        if (sideMenu) {
+            fetchItems();
+        }
+    }, [entriesRefreshKey]);
 
     return (
         <div className={classes.root}>
             <AppBar position="fixed" className={classes.navBar}>
                 <Toolbar>
-                    <IconButton
-                        edge="start"
-                        className={classes.menuButton}
-                        color="inherit"
-                        aria-label="menu"
-                        onClick={handleDrawerToggle}
-                    >
-                        <MenuIcon />
-                    </IconButton>
+                    {sideMenu &&
+                        <IconButton
+                            edge="start"
+                            className={classes.menuButton}
+                            color="inherit"
+                            aria-label="menu"
+                            onClick={handleDrawerToggle}
+                        >
+                            <MenuIcon />
+                        </IconButton>
+                    }
                     <Typography variant="h6" className={classes.title}>
-                        Fuzzy-Forum
+                        <Link to="/" onClick={() => location.pathname === '/' && window.location.reload()} className={classes.link}>Fuzzy-Forum</Link>
                     </Typography>
-                    <Button color="inherit">Login</Button>
+                    <Controls />
                 </Toolbar>
             </AppBar>
-            <SideMenu threads={threads} />
+            {sideMenu && <SideMenu threads={threads} mobileOpen={mobileOpen} handleDrawerToggle={handleDrawerToggle} />}
         </div>
     )
 }

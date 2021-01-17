@@ -1,16 +1,16 @@
 import React from 'react';
 
-// Interfaces
+// interfaces
 import { Entry } from '../../ts/interfaces/db_interfaces';
 
-// Compontents
+// compontents
 import Preview from '.';
 
 // @material-ui components
 import { Container } from '@material-ui/core';
 
 // @material-ui styles
-import { makeStyles, useTheme, Theme, createStyles } from '@material-ui/core/styles';
+import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 
 type Props = {
     entries: Entry[],
@@ -21,14 +21,15 @@ const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
             flexGrow: 1,
-            padding: theme.spacing(10),
+            [theme.breakpoints.up('md')]: {
+                marginLeft: theme.spacing(30),
+            },
         },
     }),
 );
 
 const List: React.FC<Props> = ({ isLoading, entries }) => {
     const classes = useStyles();
-    const theme = useTheme();
 
     if (isLoading) {
         return <h1>Loading...</h1>
@@ -36,9 +37,9 @@ const List: React.FC<Props> = ({ isLoading, entries }) => {
 
     return (
         <div className={classes.root}>
-            <Container maxWidth="lg">
+            <Container maxWidth="xl">
                 {entries.filter(entry => entry.active).map(entry => (
-                    <Preview entry={entry} />
+                    <Preview key={entry.id} entry={entry} />
                 ))}
             </Container>
         </div>
