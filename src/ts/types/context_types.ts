@@ -22,4 +22,8 @@ export type EntryContextType = {
     alert: AppAlert,
     setAlert: (alert: AppAlert) => void,
 }
+
+export type UserDataContextType = {
+    userData: UserData | null,
+    setUserData: (userData: UserData) => void,
 }
