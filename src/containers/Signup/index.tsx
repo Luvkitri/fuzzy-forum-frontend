@@ -41,9 +41,10 @@ const useStyles = makeStyles((theme: Theme) =>
         root: {
             maxWidth: 500,
             minWidth: 400,
+            minHeight: 300,
+            maxHeight: 1000,
             marginTop: theme.spacing(14),
             padding: 20,
-            height: '75vh',
             margin: '20px auto',
             display: 'flex',
             flexDirection: 'column',
@@ -76,18 +77,18 @@ const SignupPage: React.FC = () => {
     password.current = watch("password", "");
 
     const onSubmit = async (registerData: RegisterData) => {
-        const res = await axios.post('http://localhost:5000/users/signup', registerData);
-        const responseObj = res.data;
+        try {
+            const res = await axios.post('http://localhost:5000/users/signup', registerData);
+            const responseObj = res.data;
 
-        if (!responseObj.success) {
-            // TODO Handle error on register
-            console.log(responseObj.error);
+            history.push('/users/login');
+        } catch (error) {
+            console.log(error.response.data.errors);
         }
-
-        history.push('/users/login');
     }
 
     if (isLoggedIn()) {
+        console.log("HELLO?");
         history.goBack();
     }
 
@@ -118,6 +119,8 @@ const SignupPage: React.FC = () => {
                         fullWidth
                         autoComplete="given-name"
                         autoFocus
+                        helperText={errors.firstName && "First name must be between 2 and 50 letters"}
+                        error={errors.firstName ? true : false}
                     />
                     <TextField
                         name="lastName"
@@ -133,6 +136,8 @@ const SignupPage: React.FC = () => {
                         required
                         fullWidth
                         autoComplete="family-name"
+                        helperText={errors.lastName && "Last name must be between 2 and 50 letters"}
+                        error={errors.lastName ? true : false}
                     />
                     <TextField
                         name="login"
@@ -147,6 +152,8 @@ const SignupPage: React.FC = () => {
                         margin="normal"
                         fullWidth
                         autoComplete="username"
+                        helperText={errors.login && "Last name must be between 3 and 100 letters"}
+                        error={errors.login ? true : false}
                     />
                     <TextField
                         name="email"

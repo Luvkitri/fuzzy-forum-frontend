@@ -3,6 +3,8 @@ import { Redirect } from 'react-router-dom';
 import { useForm } from "react-hook-form";
 import axios from 'axios';
 import { isLoggedIn, setLocalStorage } from '../../utils/auth';
+
+// context
 import { UserContext } from '../../context/User';
 import { UserContextType } from '../../ts/types/context_types';
 
@@ -15,12 +17,11 @@ import {
     Paper,
     Grid,
     TextField,
-    FormControlLabel,
-    Checkbox,
     Button,
     Avatar,
     Typography,
-    Link
+    Link,
+    IconButton
 } from '@material-ui/core';
 
 // @material-ui styles
@@ -32,6 +33,11 @@ import {
 
 // @material-ui icons
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import CloseIcon from '@material-ui/icons/Close'
+
+// @material-ui labs
+import { AppAlert } from '../../ts/interfaces/local_interfaces';
+import { Alert } from '@material-ui/lab';
 
 
 type LoginData = {
@@ -46,12 +52,12 @@ const useStyles = makeStyles((theme: Theme) =>
             minWidth: 400,
             marginTop: theme.spacing(14),
             padding: 20,
-            height: '70vh',
             margin: '20px auto',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
         },
+        toolbar: theme.mixins.toolbar,
         avatar: {
             width: theme.spacing(5),
             height: theme.spacing(5),
@@ -70,19 +76,30 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const LoginPage: React.FC = () => {
     const classes = useStyles();
-    const { register, handleSubmit, errors } = useForm();
+
+    // states
+    const [alert, setAlert] = useState<AppAlert>({ active: false, type: 'error', msg: '' })
+
+    // context
     const { setUser } = useContext<UserContextType>(UserContext);
 
+    // form hook
+    const { register, handleSubmit } = useForm();
+
     const onSubmit = async (loginData: LoginData) => {
-        const res = await axios.post(`${process.env.REACT_APP_API_URL}/users/login`, loginData);
-        const responseObj = res.data;
+        try {
+            const res = await axios.post(`${process.env.REACT_APP_API_URL}/users/login`, loginData);
+            const responseObj = res.data;
 
-        if (!responseObj.auth) {
-            console.log(responseObj.error);
+            if (!responseObj.auth) {
+                console.log(responseObj.error);
+            }
+
+            setLocalStorage(responseObj);
+            setUser(responseObj.user);
+        } catch (error) {
+            setAlert({ active: true, type: 'error', msg: error.response.data.error })
         }
-
-        setLocalStorage(responseObj);
-        setUser(responseObj.user);
     }
 
     if (isLoggedIn()) {
@@ -93,6 +110,26 @@ const LoginPage: React.FC = () => {
         <div>
             <CssBaseline />
             <Header sideMenu={false} />
+            <div className={classes.toolbar} />
+            {alert.active &&
+                <Alert
+                    action={
+                        <IconButton
+                            aria-label="close"
+                            color="inherit"
+                            size="small"
+                            onClick={() => {
+                                setAlert({ active: false, type: 'error', msg: '' });
+                            }}
+                        >
+                            <CloseIcon fontSize="inherit" />
+                        </IconButton>
+                    }
+                    severity={alert.type}
+                >
+                    {alert.msg}
+                </Alert>
+            }
             <Paper className={classes.root} elevation={5}>
                 <Avatar className={classes.avatar}>
                     <LockOutlinedIcon />
@@ -128,10 +165,6 @@ const LoginPage: React.FC = () => {
                         id="password"
                         autoComplete="current-password"
                     />
-                    <FormControlLabel
-                        control={<Checkbox value="remember" color="primary" />}
-                        label="Remember me"
-                    />
                     <Button
                         type="submit"
                         fullWidth
@@ -143,9 +176,6 @@ const LoginPage: React.FC = () => {
                     </Button>
                     <Grid container>
                         <Grid item xs>
-                            <Link href="#" variant="body2">
-                                Forgot password?
-                            </Link>
                         </Grid>
                         <Grid item>
                             <Link href="/users/signup" variant="body2">
@@ -155,7 +185,6 @@ const LoginPage: React.FC = () => {
                     </Grid>
                 </form>
             </Paper>
-
         </div>
     );
 }

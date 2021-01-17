@@ -41,6 +41,7 @@ export const getJWT = () => {
 
 export const getUserData = async () => {
     try {
+        const authAxios = getAuthAxios();
         const result = await authAxios.get('/users/');
         return result.data;
     } catch (error) {
@@ -48,9 +49,11 @@ export const getUserData = async () => {
     }
 }
 
-export const authAxios = axios.create({
-    baseURL: process.env.REACT_APP_API_URL,
-    headers: {
-        Authorization: getJWT()
-    }
-});
+export const getAuthAxios = () => {
+    return axios.create({
+        baseURL: process.env.REACT_APP_API_URL,
+        headers: {
+            Authorization: getJWT()
+        }
+    });
+}

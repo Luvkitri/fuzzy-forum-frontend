@@ -1,10 +1,20 @@
 import React, { useState, useContext } from 'react';
-import { UserContext } from '../../context/User';
-import { UserContextType } from '../../ts/types/context_types';
-import { authAxios } from '../../utils/auth';
+
+
+import { getAuthAxios } from '../../utils/auth';
 
 // interfaces
 import { Thread, Tag } from '../../ts/interfaces/db_interfaces';
+import { AppAlert } from '../../ts/interfaces/local_interfaces';
+
+// types
+import { EntriesContextType, UserContextType } from '../../ts/types/context_types';
+
+// context
+import { UserContext } from '../../context/User';
+import { EntriesContext } from '../../context/Entries';
+
+
 
 // @material-ui components
 import {
@@ -18,6 +28,7 @@ import {
     Chip,
     Container,
     Box,
+    Link
 } from '@material-ui/core';
 
 // @material-ui styles
@@ -25,7 +36,6 @@ import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 
 // @material-ui lab
 import { Autocomplete, Alert } from '@material-ui/lab/';
-import { AppAlert } from '../../ts/interfaces/local_interfaces';
 
 
 type Props = {
@@ -46,7 +56,6 @@ const useStyles = makeStyles((theme: Theme) =>
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            borderRadius: 5,
         },
         toolbar: theme.mixins.toolbar,
         form: {
@@ -73,6 +82,9 @@ const useStyles = makeStyles((theme: Theme) =>
         chipContainer: {
             width: '100%',
             padding: 0,
+        },
+        caption: {
+            padding: 8
         }
     }),
 );
@@ -80,8 +92,9 @@ const useStyles = makeStyles((theme: Theme) =>
 const AddEntry: React.FC<Props> = ({ threads }) => {
     const classes = useStyles();
 
-    // User context
-    const { user } = useContext<UserContextType>(UserContext)
+    // Context
+    const { user } = useContext<UserContextType>(UserContext);
+    const { entriesRefreshKey, setEntriesRefreshKey } = useContext<EntriesContextType>(EntriesContext);
 
     // Form content states
     const [thread, setThread] = useState<string>('');
@@ -117,6 +130,7 @@ const AddEntry: React.FC<Props> = ({ threads }) => {
             entryTags: selectedTags
         }
 
+        const authAxios = getAuthAxios();
         const res = await authAxios.post(`${process.env.REACT_APP_API_URL}/entries/add`, entryData);
         const responseObj = res.data;
 
@@ -126,6 +140,7 @@ const AddEntry: React.FC<Props> = ({ threads }) => {
         }
 
         setAlert({ active: true, type: 'success', msg: 'Entry added' });
+        setEntriesRefreshKey(entriesRefreshKey + 1);
     }
 
     const handleThreadChange = (event: React.ChangeEvent<{ value: unknown }>) => {
@@ -203,8 +218,9 @@ const AddEntry: React.FC<Props> = ({ threads }) => {
                             className={classes.chip}
                         />
                     }
-                    {selectedTags.map((tag) => (
+                    {selectedTags.map((tag, index) => (
                         <Chip
+                            key={index}
                             label={tag}
                             onDelete={removeTag(tag)}
                             color="primary"
@@ -227,7 +243,7 @@ const AddEntry: React.FC<Props> = ({ threads }) => {
                                 <em>None</em>
                             </MenuItem>
                             {threads.map(thread => (
-                                <MenuItem value={thread.name}>{thread.name}</MenuItem>
+                                <MenuItem key={thread.id} value={thread.name}>{thread.name}</MenuItem>
                             ))}
                         </Select>
                     </FormControl>
@@ -280,6 +296,11 @@ const AddEntry: React.FC<Props> = ({ threads }) => {
                 >
                     Submit Entry
                 </Button>
+                <Typography className={classes.caption} color="textSecondary" variant="caption">
+                    *Fuzzy-Forum supports markdown for more information visit: <Link color="inherit" href="https://commonmark.org/help/" >
+                        https://commonmark.org/help/
+                    </Link>
+                </Typography>
             </form>
         </div>
     )

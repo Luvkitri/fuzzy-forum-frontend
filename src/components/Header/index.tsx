@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState, useContext } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import axios from 'axios';
 
 // interfaces
@@ -8,6 +8,10 @@ import { Thread } from '../../ts/interfaces/db_interfaces'
 // components
 import SideMenu from '../SideMenu';
 import Controls from './Controls';
+
+// context
+import { EntriesContext } from '../../context/Entries';
+import { EntriesContextType } from '../../ts/types/context_types';
 
 // @material-ui components
 import {
@@ -26,7 +30,6 @@ import {
 
 // @material-ui icons
 import MenuIcon from '@material-ui/icons/Menu';
-import { isLoggedIn } from '../../utils/auth';
 
 
 type Props = {
@@ -60,7 +63,12 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const Header: React.FC<Props> = ({ sideMenu }) => {
     const classes = useStyles();
+    const location = useLocation();
 
+    // Context
+    const { entriesRefreshKey } = useContext<EntriesContextType>(EntriesContext)
+
+    // States
     const [threads, setThreads] = useState<Thread[]>([]);
     const [mobileOpen, setMobileOpen] = useState<boolean>(false);
 
@@ -70,7 +78,7 @@ const Header: React.FC<Props> = ({ sideMenu }) => {
 
     useEffect(() => {
         const fetchItems = async () => {
-            const threadsRequest = axios.get('http://localhost:5000/threads');
+            const threadsRequest = axios.get(`${process.env.REACT_APP_API_URL}/threads`);
 
             try {
                 const [threads] = await axios.all([threadsRequest]);
@@ -81,12 +89,10 @@ const Header: React.FC<Props> = ({ sideMenu }) => {
             }
         }
 
-        fetchItems();
-    }, []);
-
-    if (isLoggedIn()) {
-
-    }
+        if (sideMenu) {
+            fetchItems();
+        }
+    }, [entriesRefreshKey]);
 
     return (
         <div className={classes.root}>
@@ -104,7 +110,7 @@ const Header: React.FC<Props> = ({ sideMenu }) => {
                         </IconButton>
                     }
                     <Typography variant="h6" className={classes.title}>
-                        <Link to="/" className={classes.link}>Fuzzy-Forum</Link>
+                        <Link to="/" onClick={() => location.pathname === '/' && window.location.reload()} className={classes.link}>Fuzzy-Forum</Link>
                     </Typography>
                     <Controls />
                 </Toolbar>
