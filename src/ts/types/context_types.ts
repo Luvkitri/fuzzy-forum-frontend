@@ -1,5 +1,6 @@
-import { LogedInUser } from '../../ts/interfaces/res_interfaces';
+import { LogedInUser, UserData } from '../../ts/interfaces/res_interfaces';
 import { Entry } from '../../ts/interfaces/db_interfaces';
+import { AppAlert } from '../../ts/interfaces/local_interfaces';
 
 export type UserContextType = {
     user: LogedInUser | null,
@@ -18,4 +19,7 @@ export type EntriesContextType = {
 export type EntryContextType = {
     entryRefreshKey: number,
     setEntryRefreshKey: (refreshKey: number) => void,
+    alert: AppAlert,
+    setAlert: (alert: AppAlert) => void,
+}
 }

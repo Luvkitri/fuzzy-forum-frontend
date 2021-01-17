@@ -13,4 +13,6 @@ export const EntriesContext = createContext<EntriesContextType>({
 export const EntryContext = createContext<EntryContextType>({
     entryRefreshKey: 0,
     setEntryRefreshKey: refreshKey => console.warn('No refreshKey provided'),
+    alert: { active: false, type: 'error', msg: '' },
+    setAlert: a => console.warn('No alert provided'),
 });
