@@ -1,25 +1,26 @@
 import React from 'react';
 
 // interfaces
-import { Tag, Thread } from '../../ts/interfaces/db_interfaces'
+import { Tag } from '../../ts/interfaces/db_interfaces';
+import { EntryThread } from '../../ts/interfaces/local_interfaces';
 
 // @material-ui components
-import { CardActions, Chip, Divider } from '@material-ui/core';
+import { CardActions, Chip } from '@material-ui/core';
 
 // @material-ui styles
-import { makeStyles, useTheme, Theme, createStyles } from '@material-ui/core/styles';
-import { createTrue } from 'typescript';
+import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 
 type Props = {
-    thread: {
-        id: number,
-        name: string
-    },
+    thread: EntryThread,
     tags: Tag[]
 }
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
+        root: {
+            marginLeft: 10,
+            padding: 8
+        },
         chip: {
             margin: theme.spacing(0.5),
         }
@@ -30,7 +31,7 @@ const Footer: React.FC<Props> = ({ thread, tags }) => {
     const classes = useStyles();
 
     return (
-        <CardActions>
+        <CardActions className={classes.root}>
             <Chip
                 label={thread.name}
                 clickable
@@ -39,6 +40,7 @@ const Footer: React.FC<Props> = ({ thread, tags }) => {
             />
             {tags.map(tag => (
                 <Chip
+                    key={tag.id}
                     label={tag.name}
                     clickable
                     color="primary"

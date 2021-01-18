@@ -79,6 +79,7 @@ const SignupPage: React.FC = () => {
     const onSubmit = async (registerData: RegisterData) => {
         try {
             const res = await axios.post(`${process.env.REACT_APP_API_URL}/users/signup`, registerData);
+
             const responseObj = res.data;
 
             history.push('/users/login');

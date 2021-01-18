@@ -3,6 +3,9 @@ import React from 'react'
 // interfaces
 import { Thread } from '../../ts/interfaces/db_interfaces';
 
+// components
+import SideMenuList from './SideMenuList';
+
 // @materil-ui components
 import {
     Hidden,
@@ -11,10 +14,12 @@ import {
 
 // @material-ui styles
 import { makeStyles, useTheme, Theme, createStyles } from '@material-ui/core/styles';
-import SideMenuList from './SideMenuList';
+
 
 type Props = {
-    threads: Thread[]
+    threads: Thread[],
+    mobileOpen: boolean,
+    handleDrawerToggle(): void
 }
 
 const drawerWidth = 240;
@@ -48,17 +53,18 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-const SideMenu: React.FC<Props> = ({ threads }) => {
+const SideMenu: React.FC<Props> = ({ threads, mobileOpen, handleDrawerToggle }) => {
     const classes = useStyles();
     const theme = useTheme();
 
     return (
         <nav className={classes.drawer} aria-label="mailbox folders">
-            {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
             <Hidden mdUp implementation="css">
                 <Drawer
                     variant="temporary"
                     anchor={theme.direction === 'rtl' ? 'right' : 'left'}
+                    open={mobileOpen}
+                    onClose={handleDrawerToggle}
                     classes={{
                         paper: classes.drawerPaper,
                     }}
