@@ -16,7 +16,7 @@ app.use(express.static(buildPath));
 
 
 app.get('*', (req, res) => {
-    res.sendFile(path.join(publicPath, 'index.html'));
+    res.sendFile(path.join(buildPath, 'index.html'));
 });
 
 app.listen(port, () => {
