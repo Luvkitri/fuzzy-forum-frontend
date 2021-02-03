@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { useHistory } from 'react-router-dom';
+import { Redirect, useHistory } from 'react-router-dom';
 import { useForm } from "react-hook-form";
 import axios from 'axios';
 import { isLoggedIn } from '../../utils/auth';
@@ -89,7 +89,7 @@ const SignupPage: React.FC = () => {
     }
 
     if (isLoggedIn()) {
-        history.goBack();
+        return <Redirect to="/" />
     }
 
     return (
